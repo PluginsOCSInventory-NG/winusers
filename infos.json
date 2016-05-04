@@ -1,0 +1,10 @@
+{
+  "displayName" : "Winusers",
+  "author" : ["J.C.BELLAMY"],
+  "contributor" : ["Guillaume PRIOU", "Gilles DUBOIS"],
+  "supportedAgent" : ["Windows"],
+  "description" : {
+    "fr" : "Remonte les utilisateurs Windows",
+    "en" : "Retrieve Windows users"
+  }
+}
