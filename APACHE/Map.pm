@@ -24,6 +24,10 @@ writeDiff => 0,
 cache => 0,
 fields => {
      NAME => {},
+     TYPE => {},
+     DESCRIPTION => {},
+     DISABLED => {},
+     SID => {},
 }
  
 };

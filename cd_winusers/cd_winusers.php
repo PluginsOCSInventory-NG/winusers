@@ -28,6 +28,10 @@
 	$tab_options['table_name']=$table_name;
 	echo open_form($form_name);
 	$list_fields=array( 'name' => 'name',
+                        'type' => 'type',
+                        'description' => 'description',
+                        'disabled' => 'disabled',
+                        'sid' => 'sid',
 	);
 	$list_col_cant_del=$list_fields;
 	$default_fields= $list_fields;
