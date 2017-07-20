@@ -61,7 +61,7 @@ For Each objItem in colItems
 "<DESCRIPTION>" & StripAccents(objItem.Description)  & "</DESCRIPTION>" & VbCrLf &_
 "<DISABLED>" & objItem.Disabled  & "</DISABLED>" & VbCrLf &_
 "<SID>" & objItem.SID  & "</SID>" & VbCrLf &_
-   "</WINUSERS>"
+"</WINUSERS>"
 next
 
 On Error Resume Next
