@@ -16,22 +16,22 @@ Set Network = Wscript.CreateObject("WScript.Network")
 Computer=Network.ComputerName
 
 Function StripAccents(str)
-	accent   = "ÈÉÊËÛÙÏÎÀÂÔÖÇèéêëûùïîàâôöç"
-	noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
-	currentChar = ""
-	result = ""
-	k = 0
-	o = 0
-	For k = 1 To len(str)
-		currentChar = mid(str,k, 1)
-		o = InStr(accent, currentChar)
-		If o > 0 Then
-			result = result & mid(noaccent,o,1)
-		Else
-			result = result & currentChar
-		End If
-	Next
-	StripAccents = result
+   accent   = "ÈÉÊËÛÙÏÎÀÂÔÖÇèéêëûùïîàâôöç"
+   noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
+   currentChar = ""
+   result = ""
+   k = 0
+   o = 0
+   For k = 1 To len(str)
+      currentChar = mid(str,k, 1)
+      o = InStr(accent, currentChar)
+      If o > 0 Then
+         result = result & mid(noaccent,o,1)
+      Else
+         result = result & currentChar
+      End If
+   Next
+   StripAccents = result
 End Function
 
 Function IfAdmin(str)
@@ -61,3 +61,4 @@ For Each objItem in colItems
 		"<SID>" & objItem.SID  & "</SID>" & VbCrLf &_
 		"</WINUSERS>"
 Next
+
