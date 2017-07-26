@@ -18,7 +18,7 @@
 	else{
 		$ajax=false;
 	}
-	print_item_header("Windows Users");
+	print_item_header("Utilisateurs Windows");
 	if (!isset($protectedPost['SHOW']))
 		$protectedPost['SHOW'] = 'NOSHOW';
 	$form_name="winusers";
@@ -27,16 +27,16 @@
 	$tab_options['form_name']=$form_name;
 	$tab_options['table_name']=$table_name;
 	echo open_form($form_name);
-	$list_fields=array( 'name' => 'name',
-                        'type' => 'type',
-                        'description' => 'description',
-                        'disabled' => 'disabled',
-                        'sid' => 'sid',
+	$list_fields=array( 'Nom' => 'name',
+                        'Type' => 'type',
+                        'Description' => 'description',
+                        'Status' => 'status',
+                        'Sid' => 'sid',
 	);
 	$list_col_cant_del=$list_fields;
 	$default_fields= $list_fields;
 	$sql=prepare_sql_tab($list_fields);
-	$sql['SQL']  .= "FROM winusers WHERE (hardware_id=$systemid)";
+	$sql['SQL']  .= "FROM $table_name WHERE (hardware_id=$systemid)";
 	array_push($sql['ARG'],$systemid);
 	$tab_options['ARG_SQL']=$sql['ARG'];
 	$tab_options['ARG_SQL_COUNT']=$systemid;
