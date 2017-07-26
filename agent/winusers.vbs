@@ -2,9 +2,9 @@
 ' Script : Users list
 ' Version : 2.0
 ' Date : 23/07/2017
-' Author : J.C.BELLAMY © 2000
+' Author : J.C.BELLAMY Â© 2000
 ' OCS adaptation  :	Guillaume PRIOU
-' Various updates :	Stéphane PAUTREL
+' Various updates :	StÃ©phane PAUTREL
 '----------------------------------------------------------
 On Error Resume Next
 
@@ -16,7 +16,7 @@ Set Network = Wscript.CreateObject("WScript.Network")
 Computer=Network.ComputerName
 
 Function StripAccents(str)
-	accent   = "ÈÉÊËÛÙÏÎÀÂÔÖÇèéêëûùïîàâôöç"
+	accent   = "ÃˆÃ‰ÃŠÃ‹Ã›Ã™ÃÃÃ€Ã‚Ã”Ã–Ã‡Ã¨Ã©ÃªÃ«Ã»Ã¹Ã¯Ã®Ã Ã¢Ã´Ã¶Ã§"
 	noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
 	currentChar = ""
 	result = ""
@@ -53,7 +53,7 @@ Set colItems = objWMIService.ExecQuery _
 For Each objItem in colItems
 	IfAdmin(objItem.Name)
 	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then _
-		UserStatus = "Actif" Else UserStatus = "Inactif"
+		UserStatus = "Enabled" Else UserStatus = "Disabled"
 	Wscript.echo _
 		"<WINUSERS>" & VbCrLf &_
 		"<NAME>" & StripAccents(objItem.Name) & "</NAME>" & VbCrLf &_
