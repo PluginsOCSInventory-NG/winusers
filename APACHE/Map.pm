@@ -26,8 +26,8 @@ fields => {
      NAME => {},
      TYPE => {},
      DESCRIPTION => {},
-     DISABLED => {},
-     SID => {},
+     STATUS => {},
+     SID => {}
 }
  
 };
