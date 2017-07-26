@@ -27,7 +27,7 @@
 	$tab_options['form_name']=$form_name;
 	$tab_options['table_name']=$table_name;
 	echo open_form($form_name);
-	$list_fields=array( 'Nom' => 'name',
+	$list_fields=array( 'Name' => 'name',
                         'Type' => 'type',
                         'Description' => 'description',
                         'Status' => 'status',
