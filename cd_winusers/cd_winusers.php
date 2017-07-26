@@ -18,7 +18,7 @@
 	else{
 		$ajax=false;
 	}
-	print_item_header("Utilisateurs Windows");
+	print_item_header("Windows users");
 	if (!isset($protectedPost['SHOW']))
 		$protectedPost['SHOW'] = 'NOSHOW';
 	$form_name="winusers";
