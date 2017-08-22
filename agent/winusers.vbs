@@ -3,17 +3,18 @@
 ' Script : Users list
 ' Version : 2.00
 ' Date : 23/07/2017
-' Author : J.C.BELLAMY © 2000
+' Author : J.C.BELLAMY ¬© 2000
 ' OCS adaptation  :	Guillaume PRIOU
-' Various updates :	StÈphane PAUTREL (acb78.com)
+' Various updates :	St√©phane PAUTREL (acb78.com)
 '----------------------------------------------------------
 ' OS checked [X] on	32b	64b	(Professionnal edition)
 ' Windows XP		[X]	[ ]
-' Windows 7			[X]	[X]
+' Windows Vista		[X]	[X]
+' Windows 7		[X]	[X]
 ' Windows 8.1		[X]	[X]	
 ' Windows 10		[X]	[X]
 ' ---------------------------------------------------------
-' NOTE : No checked on Windows Vista and Windows 8
+' NOTE : No checked on Windows 8
 ' ---------------------------------------------------------
 On Error Resume Next
 
@@ -25,7 +26,7 @@ Set Network = Wscript.CreateObject("WScript.Network")
 Computer=Network.ComputerName
 
 Function StripAccents(str)
-	accent   = "»… À€ŸœŒ¿¬‘÷«ËÈÍÎ˚˘ÔÓ‡‚ÙˆÁ"
+	accent   = "√à√â√ä√ã√õ√ô√è√é√Ä√Ç√î√ñ√á√®√©√™√´√ª√π√Ø√Æ√†√¢√¥√∂√ß"
 	noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
 	currentChar = ""
 	result = ""
