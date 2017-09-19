@@ -1,57 +1,65 @@
-'---------------------------------------------------------- 
-' Liste des utilisateurs
-' Auteur : ' J.C.BELLAMY Â© 2000 
-' Adaptation pour OCS : Guillaume PRIOU
 '----------------------------------------------------------
-Dim network, computer, Item 
-Set network = Wscript.CreateObject("WScript.Network") 
-computer=network.ComputerName 
+' Script : Users list
+' Version : 2.0
+' Date : 23/07/2017
+' Author : J.C.BELLAMY Â© 2000
+' OCS adaptation  :	Guillaume PRIOU
+' Various updates :	StÃ©phane PAUTREL
+'----------------------------------------------------------
+On Error Resume Next
+
+Dim Network, Computer, objWMIService
+Dim colItems, objItem, colAdmGroup, UserType, UserStatus, objAdm
+Dim accent, noaccent, currentChar, result, k, o
+
+Set Network = Wscript.CreateObject("WScript.Network")
+Computer=Network.ComputerName
 
 Function StripAccents(str)
-   accent   = "ÈÉÊËÛÙÏÎÀÂÔÖÇèéêëûùïîàâôöç"
-   noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
-   currentChar = ""
-   result = ""
-   k = 0
-   o = 0
-   For k = 1 To len(str)
-      currentChar = mid(str,k, 1)
-      o = InStr(accent, currentChar)
-      If o > 0 Then
-         result = result & mid(noaccent,o,1)
-      Else
-         result = result & currentChar
-      End If
-   Next
-   StripAccents = result
+	accent   = "ÃˆÃ‰ÃŠÃ‹Ã›Ã™ÃÃŽÃ€Ã‚Ã”Ã–Ã‡Ã¨Ã©ÃªÃ«Ã»Ã¹Ã¯Ã®Ã Ã¢Ã´Ã¶Ã§"
+	noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
+	currentChar = ""
+	result = ""
+	k = 0
+	o = 0
+	For k = 1 To len(str)
+		currentChar = mid(str,k, 1)
+		o = InStr(accent, currentChar)
+		If o > 0 Then
+			result = result & mid(noaccent,o,1)
+		Else
+			result = result & currentChar
+		End If
+	Next
+	StripAccents = result
 End Function
 
-On Error Resume Next
-Set objWMIService = GetObject("winmgmts:" _ 
-    & "{impersonationLevel=impersonate}!\\" & computer & "\root\cimv2") 
- 
-Set colItems = objWMIService.ExecQuery _ 
-    ("Select * from Win32_UserAccount Where LocalAccount = True") 
-    
+Function IfAdmin(str)
+	Set colAdmGroup = GetObject("WinNT://./Administrateurs") ' get members of the local admin group
+	UserType = "Local user"
+	For Each objAdm In colAdmGroup.Members
+		If objAdm.Name = objItem.Name Then
+			UserType = "Local admin"
+		End If
+	Next
+End Function
+
+Set objWMIService = GetObject("winmgmts:" _
+	& "{impersonationLevel=impersonate}!\\" & computer & "\root\cimv2")
+
+Set colItems = objWMIService.ExecQuery _
+	("Select * from Win32_UserAccount Where LocalAccount = True")
+
 For Each objItem in colItems
-   wscript.echo "<WINUSERS>"
-   wscript.echo "<NAME>" & StripAccents(objItem.Name) & "</NAME>"
-   wscript.echo "<TYPE>Local user</TYPE>"
-   wscript.echo "<DESCRIPTION>" & StripAccents(objItem.Description)  & "</DESCRIPTION>"
-   wscript.echo "<DISABLED>" & objItem.Disabled  & "</DISABLED>"
-   wscript.echo "<SID>" & objItem.SID  & "</SID>"
-   wscript.echo "</WINUSERS>"
-next
-
-On Error Resume Next
-Set objWinNT = GetObject("WinNT://./Administrateurs,group") ' get members of the local admin group
-For Each Item In objWinNT.Members
-    wscript.echo "<WINUSERS>"
-    wscript.echo "<NAME>" & StripAccents(Item.Name) & "</NAME>"
-    wscript.echo "<TYPE>Admin user</TYPE>"
-    wscript.echo "<DESCRIPTION>" & StripAccents(Item.Description)  & "</DESCRIPTION>"
-    wscript.echo "<DISABLED>" & Item.Disabled  & "</DISABLED>"
-    wscript.echo "<SID>" & Item.SID  & "</SID>"
-    wscript.echo "</WINUSERS>"
+	IfAdmin(objItem.Name)
+	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then _
+		UserStatus = "Enabled" Else UserStatus = "Disabled"
+	Wscript.echo _
+		"<WINUSERS>" & VbCrLf &_
+		"<NAME>" & StripAccents(objItem.Name) & "</NAME>" & VbCrLf &_
+		"<TYPE>" & UserType & "</TYPE>" & VbCrLf &_
+		"<DESCRIPTION>" & StripAccents(objItem.Description)  & "</DESCRIPTION>" & VbCrLf &_
+		"<STATUS>" & UserStatus  & "</STATUS>" & VbCrLf &_
+		"<SID>" & objItem.SID  & "</SID>" & VbCrLf &_
+		"</WINUSERS>"
 Next
-
