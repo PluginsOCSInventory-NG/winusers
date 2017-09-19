@@ -1,11 +1,24 @@
 '----------------------------------------------------------
+' Plugin for OCS Inventory NG 2.x
 ' Script : Users list
-' Version : 2.0
+' Version : 2.00
 ' Date : 23/07/2017
 ' Author : J.C.BELLAMY © 2000
 ' OCS adaptation  :	Guillaume PRIOU
-' Various updates :	Stéphane PAUTREL
+' Various updates :	Stéphane PAUTREL (acb78.com)
 '----------------------------------------------------------
+' OS checked [X] on	32b	64b	(Professionnal edition)
+'	Windows XP	[X]
+'	Windows Vista	[X]	[X]
+'	Windows 7	[X]	[X]
+'	Windows 8.1	[X]	[X]	
+'	Windows 10	[X]	[X]
+'	Windows 2k8R2		[X]
+'	Windows 2k12R2		[X]
+'	Windows 2k16		[X]
+' ---------------------------------------------------------
+' NOTE : No checked on Windows 8
+' ---------------------------------------------------------
 On Error Resume Next
 
 Dim Network, Computer, objWMIService
@@ -53,7 +66,7 @@ Set colItems = objWMIService.ExecQuery _
 For Each objItem in colItems
 	IfAdmin(objItem.Name)
 	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then _
-		UserStatus = "Enabled" Else UserStatus = "Disabled"
+		UserStatus = "Actif" Else UserStatus = "Inactif"
 	Wscript.echo _
 		"<WINUSERS>" & VbCrLf &_
 		"<NAME>" & StripAccents(objItem.Name) & "</NAME>" & VbCrLf &_
