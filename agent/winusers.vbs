@@ -1,35 +1,33 @@
 '----------------------------------------------------------
 ' Plugin for OCS Inventory NG 2.x
 ' Script : Users list
-' Version : 2.00
+' Version : 2.10
 ' Date : 23/07/2017
-' Author : J.C.BELLAMY ¬© 2000
+' Author : J.C.BELLAMY © 2000
 ' OCS adaptation  :	Guillaume PRIOU
-' Various updates :	St√©phane PAUTREL (acb78.com)
+' Various updates :	StÈphane PAUTREL (acb78.com)
 '----------------------------------------------------------
 ' OS checked [X] on	32b	64b	(Professionnal edition)
-'	Windows XP	[X]
-'	Windows Vista	[X]	[X]
-'	Windows 7	[X]	[X]
-'	Windows 8.1	[X]	[X]	
-'	Windows 10	[X]	[X]
-'	Windows 2k8R2		[X]
-'	Windows 2k12R2		[X]
-'	Windows 2k16		[X]
+' Windows XP		[X]
+' Windows Vista		[X]	[X]
+' Windows 7			[X]	[X]
+' Windows 8.1		[X]	[X]	
+' Windows 10		[X]	[X]
 ' ---------------------------------------------------------
 ' NOTE : No checked on Windows 8
 ' ---------------------------------------------------------
 On Error Resume Next
 
-Dim Network, Computer, objWMIService
+Dim Network, objFSO, Computer, objWMIService
 Dim colItems, objItem, colAdmGroup, UserType, UserStatus, objAdm
 Dim accent, noaccent, currentChar, result, k, o
 
+Set objFSO = Wscript.CreateObject("Scripting.FileSystemObject")
 Set Network = Wscript.CreateObject("WScript.Network")
 Computer=Network.ComputerName
 
 Function StripAccents(str)
-	accent   = "√à√â√ä√ã√õ√ô√è√é√Ä√Ç√î√ñ√á√®√©√™√´√ª√π√Ø√Æ√†√¢√¥√∂√ß"
+	accent   = "»… À€ŸœŒ¿¬‘÷«ËÈÍÎ˚˘ÔÓ‡‚ÙˆÁ"
 	noaccent = "EEEEUUIIAAOOCeeeeuuiiaaooc"
 	currentChar = ""
 	result = ""
@@ -57,6 +55,30 @@ Function IfAdmin(str)
 	Next
 End Function
 
+Function getFolderSize(folderName)	
+    On Error Resume Next
+    size = 0
+    hasSubfolders = False
+    Set folder = objFSO.GetFolder(folderName)
+    Err.Clear
+    size = folder.Size
+
+    If Err.Number <> 0 then   
+        For Each subfolder in folder.SubFolders
+            size = size + getFolderSize(subfolder.Path)
+            hasSubfolders = True
+        Next
+
+        If not hasSubfolders then
+            size = folder.Size
+        End If
+    End If
+
+    getFolderSize = size
+
+    Set folder = Nothing        
+End Function
+
 Set objWMIService = GetObject("winmgmts:" _
 	& "{impersonationLevel=impersonate}!\\" & computer & "\root\cimv2")
 
@@ -65,12 +87,14 @@ Set colItems = objWMIService.ExecQuery _
 
 For Each objItem in colItems
 	IfAdmin(objItem.Name)
-	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then _
-		UserStatus = "Actif" Else UserStatus = "Inactif"
+	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then UserStatus = "Actif"	' or Enabled in your native language
+	If objItem.Disabled = "True" Or objItem.Disabled = "Vrai" Then UserStatus = "Inactif"	' or Disabled in your native language
+	Set objFolder = objFSO.GetFolder("C:\Users\" & objItem.Name & "")
 	Wscript.echo _
 		"<WINUSERS>" & VbCrLf &_
 		"<NAME>" & StripAccents(objItem.Name) & "</NAME>" & VbCrLf &_
 		"<TYPE>" & UserType & "</TYPE>" & VbCrLf &_
+		"<SIZE>" & round(getFolderSize(objFolder)/(1024*1024),0) & "</SIZE>" & VbCrLf &_
 		"<DESCRIPTION>" & StripAccents(objItem.Description)  & "</DESCRIPTION>" & VbCrLf &_
 		"<STATUS>" & UserStatus  & "</STATUS>" & VbCrLf &_
 		"<SID>" & objItem.SID  & "</SID>" & VbCrLf &_
