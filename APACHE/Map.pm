@@ -25,6 +25,7 @@ cache => 0,
 fields => {
      NAME => {},
      TYPE => {},
+     SIZE => {},
      DESCRIPTION => {},
      STATUS => {},
      SID => {}
