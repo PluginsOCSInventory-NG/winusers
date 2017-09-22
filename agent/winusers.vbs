@@ -90,6 +90,7 @@ Set colItems = objWMIService.ExecQuery _
 
 For Each objItem in colItems
 	IfAdmin(objItem.Name)
+	UserStatus = objItem.Disabled
 	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then UserStatus = "Actif"	' or Enabled in your native language
 	If objItem.Disabled = "True" Or objItem.Disabled = "Vrai" Then UserStatus = "Inactif"	' or Disabled in your native language
 	Set objFolder = objFSO.GetFolder("C:\Users\" & objItem.Name & "")
@@ -102,4 +103,5 @@ For Each objItem in colItems
 		"<STATUS>" & UserStatus  & "</STATUS>" & VbCrLf &_
 		"<SID>" & objItem.SID  & "</SID>" & VbCrLf &_
 		"</WINUSERS>"
+	Set objFolder = Nothing
 Next
