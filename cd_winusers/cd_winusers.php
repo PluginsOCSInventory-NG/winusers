@@ -8,7 +8,7 @@
 // code is always made freely available.
 // Please refer to the General Public Licence http://www.gnu.org/ or Licence.txt
 //====================================================================================
- 
+
 	if(AJAX){
 		parse_str($protectedPost['ocs']['0'], $params);
 		$protectedPost+=$params;
@@ -28,11 +28,12 @@
 	$tab_options['table_name']=$table_name;
 	echo open_form($form_name);
 	$list_fields=array( 'Name' => 'name',
-                        'Type' => 'type',
-                        'Size (MB)' => 'size',
-                        'Description' => 'description',
-                        'Status' => 'status',
-                        'Sid' => 'sid',
+						'Type' => 'type',
+						'Size (MB)' => 'size',
+						'Last logon' => 'lastlogon',
+						'Description' => 'description',
+						'Status' => 'status',
+						'Sid' => 'sid'
 	);
 	$list_col_cant_del=$list_fields;
 	$default_fields= $list_fields;
