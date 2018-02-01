@@ -26,6 +26,7 @@ fields => {
      NAME => {},
      TYPE => {},
      SIZE => {},
+     LASTLOGON => {},
      DESCRIPTION => {},
      STATUS => {},
      SID => {}
