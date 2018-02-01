@@ -1,11 +1,10 @@
 '----------------------------------------------------------
 ' Plugin for OCS Inventory NG 2.x
 ' Script : Users list
-' Version : 2.10
-' Date : 23/07/2017
-' Author : J.C.BELLAMY © 2000
+' Version : 2.20
+' Date : 01/02/2018
+' Authors : J.C. BELLAMY © 2000 and Stéphane PAUTREL (acb78.com)
 ' OCS adaptation  :	Guillaume PRIOU
-' Various updates :	Stéphane PAUTREL (acb78.com)
 '----------------------------------------------------------
 ' OS checked [X] on	32b	64b	(Professionnal edition)
 '	Windows XP		[X]
@@ -82,8 +81,7 @@ Function getFolderSize(folderName)
     Set folder = Nothing        
 End Function
 
-Set objWMIService = GetObject("winmgmts:" _
-	& "{impersonationLevel=impersonate}!\\" & computer & "\root\cimv2")
+Set objWMIService = GetObject("winmgmts:root\cimv2")
 
 Set colItems = objWMIService.ExecQuery _
 	("Select * from Win32_UserAccount Where LocalAccount = True")
@@ -94,11 +92,18 @@ For Each objItem in colItems
 	If objItem.Disabled = "False" Or objItem.Disabled = "Faux" Then UserStatus = "Actif"	' or Enabled in your native language
 	If objItem.Disabled = "True" Or objItem.Disabled = "Vrai" Then UserStatus = "Inactif"	' or Disabled in your native language
 	Set objFolder = objFSO.GetFolder("C:\Users\" & objItem.Name & "")
+	
+	dtmLastLogin = "NC"	' Default text (for ex. Never connected)
+	On Error Resume Next
+	Set objUser = GetObject("WinNT://./" & objItem.Name & ",user")
+	dtmLastLogin = objUser.LastLogin
+	
 	Wscript.echo _
 		"<WINUSERS>" & VbCrLf &_
 		"<NAME>" & StripAccents(objItem.Name) & "</NAME>" & VbCrLf &_
 		"<TYPE>" & UserType & "</TYPE>" & VbCrLf &_
 		"<SIZE>" & round(getFolderSize(objFolder)/(1024*1024),0) & "</SIZE>" & VbCrLf &_
+		"<LASTLOGON>" & dtmLastLogin & "</LASTLOGON>" & VbCrLf &_
 		"<DESCRIPTION>" & StripAccents(objItem.Description)  & "</DESCRIPTION>" & VbCrLf &_
 		"<STATUS>" & UserStatus  & "</STATUS>" & VbCrLf &_
 		"<SID>" & objItem.SID  & "</SID>" & VbCrLf &_
