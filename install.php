@@ -16,6 +16,8 @@ function extension_install_winusers()
                              `LASTLOGON` VARCHAR(255) DEFAULT NULL,
                              `DESCRIPTION` VARCHAR(255) DEFAULT NULL,
                              `STATUS` VARCHAR(255) DEFAULT NULL,
+                             `USERMAYCHANGEPWD` VARCHAR(255) DEFAULT NULL,
+                             `PASSWORDEXPIRES` VARCHAR(255) DEFAULT NULL,
                              `SID` VARCHAR(255) DEFAULT NULL,
                              PRIMARY KEY  (`ID`,`HARDWARE_ID`)
                              ) ENGINE=InnoDB ;");
