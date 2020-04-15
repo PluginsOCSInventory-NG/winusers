@@ -45,4 +45,5 @@ foreach ($user in $users) {
 	}
 }
 
-Write-Host $xml
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+[Console]::WriteLine($xml)
