@@ -33,8 +33,8 @@
 						'Last logon' => 'lastlogon',
 						'Description' => 'description',
 						'Status' => 'status',
-						'Change Password' => 'usermaychangepwd'
-						'Password expires' => 'passwordexpires' 
+						'Change Password' => 'usermaychangepwd',
+						'Password expires' => 'passwordexpires',
 						'Sid' => 'sid'
 	);
 	$list_col_cant_del=$list_fields;
