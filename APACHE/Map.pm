@@ -28,6 +28,8 @@ fields => {
      SIZE => {},
      LASTLOGON => {},
      DESCRIPTION => {},
+     USERMAYCHANGEPWD => {},
+     PASSWORDEXPIRES => {},
      STATUS => {},
      SID => {}
 }
