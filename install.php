@@ -7,7 +7,10 @@ function extension_install_winusers()
 {
     $commonObject = new ExtensionCommon;
 
-    $commonObject -> sqlQuery("CREATE TABLE IF NOT EXISTS `winusers` (
+    // Drop table first
+    $commonObject -> sqlQuery("DROP TABLE `winusers`;");
+
+    $commonObject -> sqlQuery("CREATE TABLE `winusers` (
                              `ID` INT(11) NOT NULL AUTO_INCREMENT,
                              `HARDWARE_ID` INT(11) NOT NULL,
                              `NAME` VARCHAR(255) DEFAULT NULL,
