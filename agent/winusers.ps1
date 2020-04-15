@@ -16,7 +16,6 @@ function Get-AdminUser {
 function Get-Size
 {
 	param([string]$pth)
-	write-host $pth
 	"{0:n2}" -f ((gci -path $pth -recurse | measure-object -property length -sum).sum /1mb)
 }
 
