@@ -30,17 +30,17 @@ foreach ($user in $users) {
 		$folderSize = Get-Size $path
 		if($user.Enabled -ne "False") { $userStatus = "Disabled" } else { $userStatus = "Enabled" }
 	
-		$xml += "<WINUSERS>`n"
-		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
-		$xml += "<TYPE>"+ $userType +"</TYPE>`n"
-		$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
-		$xml += "<LASTLOGON>"+ $user.LastLogon +"</LASTLOGON>`n"
-		$xml += "<DESCRIPTION>"+ $user.Description +"</DESCRIPTION>`n"
-		$xml += "<STATUS>"+ $userStatus +"</STATUS>`n"
-		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>`n"
-		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>`n"
-		$xml += "<SID>"+ $user.SID +"</SID>`n"
-		$xml += "</WINUSERS>`n"
+		$xml += "<WINUSERS>"
+		$xml += "<NAME>"+ $user.Name +"</NAME>"
+		$xml += "<TYPE>"+ $userType +"</TYPE>"
+		$xml += "<SIZE>"+ $folderSize +"</SIZE>"
+		$xml += "<LASTLOGON>"+ $user.LastLogon +"</LASTLOGON>"
+		$xml += "<DESCRIPTION>"+ $user.Description +"</DESCRIPTION>"
+		$xml += "<STATUS>"+ $userStatus +"</STATUS>"
+		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>"
+		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>"
+		$xml += "<SID>"+ $user.SID +"</SID>"
+		$xml += "</WINUSERS>"
 	}
 }
 
