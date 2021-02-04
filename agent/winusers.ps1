@@ -1,6 +1,6 @@
 function Get-AdminUser {
 	param([string] $username)
-	$admingroup = Get-LocalGroupMember -Group "Administrateurs"
+	$admingroup = Get-LocalGroupMember -Group "Administrators"
 	$userType = "Local user"
 	
 	foreach ($admin in $admingroup) {
