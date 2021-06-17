@@ -21,6 +21,8 @@ function Get-Size
 
 
 $users = Get-LocalUser | Select *
+$pathUsers = "C:\Users"
+$allUsers = @()
 
 foreach ($user in $users) {
 	if($user.Name -ne $null){
@@ -41,7 +43,29 @@ foreach ($user in $users) {
 		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>"
 		$xml += "<SID>"+ $user.SID +"</SID>"
 		$xml += "</WINUSERS>"
+
+		$allUsers += $user.Name
 	}
+}
+
+$tmp = Get-ChildItem -Path $pathUsers | Select "Name"
+[System.Collections.ArrayList]$usersFolder = $tmp.Name
+
+while ($usersFolder -contains "Public") {
+	$usersFolder.Remove("Public")
+}
+
+$usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
+
+foreach ($userAd in $usersAd) {
+		$path = "C:\Users\"+ $user.Name
+		$folderSize = Get-Size $path
+	
+		$xml += "<WINUSERS>"
+		$xml += "<NAME>"+ $user.Name +"</NAME>"
+		$xml += "<TYPE>"+ $userType +"</TYPE>"
+		$xml += "<SIZE>"+ $folderSize +"</SIZE>"
+		$xml += "</WINUSERS>"
 }
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
