@@ -58,14 +58,14 @@ while ($usersFolder -contains "Public") {
 $usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
 
 foreach ($userAd in $usersAd) {
-		$path = "C:\Users\"+ $user.Name
-		$folderSize = Get-Size $path
+	$path = "C:\Users\"+ $userAd
+	$folderSize = Get-Size $path
 	
-		$xml += "<WINUSERS>"
-		$xml += "<NAME>"+ $user.Name +"</NAME>"
-		$xml += "<TYPE>"+ $userType +"</TYPE>"
-		$xml += "<SIZE>"+ $folderSize +"</SIZE>"
-		$xml += "</WINUSERS>"
+	$xml += "<WINUSERS>"
+	$xml += "<NAME>"+ $userAd +"</NAME>"
+	$xml += "<TYPE>"+ $userType +"</TYPE>"
+	$xml += "<SIZE>"+ $folderSize +"</SIZE>"
+	$xml += "</WINUSERS>"
 }
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
