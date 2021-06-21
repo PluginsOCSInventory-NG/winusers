@@ -3,7 +3,7 @@
   "author" : ["J.C.BELLAMY"],
   "contributor" : ["Guillaume PRIOU", "Gilles DUBOIS", "Rudy LAURENT"],
   "supportedAgent" : ["Windows"],
-  "version" : "3.0",
+  "version" : "3.1",
   "licence" : "GPLv2",
   "description" : {
     "fr" : "Remonte les utilisateurs Windows",

@@ -63,7 +63,7 @@ foreach ($userAd in $usersAd) {
 	
 	$xml += "<WINUSERS>"
 	$xml += "<NAME>"+ $userAd +"</NAME>"
-	$xml += "<TYPE>"+ $userType +"</TYPE>"
+	$xml += "<TYPE>Domain user</TYPE>"
 	$xml += "<SIZE>"+ $folderSize +"</SIZE>"
 	$xml += "</WINUSERS>"
 }
