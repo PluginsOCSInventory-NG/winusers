@@ -1,12 +1,12 @@
 function Get-AdminUser {
 	param([string] $username)
 	$admingroup = Get-LocalGroupMember -SID "S-1-5-32-544"
-	$userType = "Local user"
+	$userType = "Local"
 	
 	foreach ($admin in $admingroup) {
 		$name = $admin.name -split "\\"
 		if($name[1] -eq $username){
-			$userType = "Admin user"
+			$userType = "Admin"
 		}
 	}
 	
@@ -34,7 +34,8 @@ foreach ($user in $users) {
 		$path = "C:\Users\"+ $user.Name
 		$folderSize = Get-Size $path
 		if($user.Enabled -ne "False") { $userStatus = "Disabled" } else { $userStatus = "Enabled" }
-	
+		if($userType -eq "Local") { $userType = $user.PrincipalSource }
+		
 		$xml += "<WINUSERS>`n"
 		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
 		$xml += "<TYPE>"+ $userType +"</TYPE>`n"
@@ -66,7 +67,7 @@ foreach ($userAd in $usersAd) {
 	
 	$xml += "<WINUSERS>`n"
 	$xml += "<NAME>"+ $userAd +"</NAME>`n"
-	$xml += "<TYPE>Domain user</TYPE>`n"
+	$xml += "<TYPE>Domain</TYPE>`n"
 	$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
 	$xml += "</WINUSERS>`n"
 }
