@@ -1,9 +1,9 @@
 {
   "displayName" : "Winusers",
   "author" : ["J.C.BELLAMY"],
-  "contributor" : ["Guillaume PRIOU", "Gilles DUBOIS", "Rudy LAURENT"],
+  "contributor" : ["Guillaume PRIOU", "Gilles DUBOIS", "Rudy LAURENT", "Charlene AUGER"],
   "supportedAgent" : ["Windows"],
-  "version" : "3.1",
+  "version" : "3.2",
   "licence" : "GPLv2",
   "description" : {
     "fr" : "Remonte les utilisateurs Windows",
