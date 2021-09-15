@@ -16,9 +16,12 @@ function Get-AdminUser {
 function Get-Size
 {
 	param([string]$pth)
-	"{0:n2}" -f ((gci -path $pth -recurse | measure-object -property length -sum).sum /1mb)
+	try {
+		"{0:n2}" -f ((gci -path $pth -recurse -ErrorAction Ignore | measure-object -ErrorAction Stop -property length -sum).sum /1mb)
+	} catch {
+		"{0:n2}" -f 0
+	}
 }
-
 
 $users = Get-LocalUser | Select *
 $pathUsers = "C:\Users"
@@ -32,17 +35,17 @@ foreach ($user in $users) {
 		$folderSize = Get-Size $path
 		if($user.Enabled -ne "False") { $userStatus = "Disabled" } else { $userStatus = "Enabled" }
 	
-		$xml += "<WINUSERS>"
-		$xml += "<NAME>"+ $user.Name +"</NAME>"
-		$xml += "<TYPE>"+ $userType +"</TYPE>"
-		$xml += "<SIZE>"+ $folderSize +"</SIZE>"
-		$xml += "<LASTLOGON>"+ $user.LastLogon +"</LASTLOGON>"
-		$xml += "<DESCRIPTION>"+ $user.Description +"</DESCRIPTION>"
-		$xml += "<STATUS>"+ $userStatus +"</STATUS>"
-		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>"
-		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>"
-		$xml += "<SID>"+ $user.SID +"</SID>"
-		$xml += "</WINUSERS>"
+		$xml += "<WINUSERS>`n"
+		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
+		$xml += "<TYPE>"+ $userType +"</TYPE>`n"
+		$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
+		$xml += "<LASTLOGON>"+ $user.LastLogon +"</LASTLOGON>`n"
+		$xml += "<DESCRIPTION>"+ $user.Description +"</DESCRIPTION>`n"
+		$xml += "<STATUS>"+ $userStatus +"</STATUS>`n"
+		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>`n"
+		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>`n"
+		$xml += "<SID>"+ $user.SID +"</SID>`n"
+		$xml += "</WINUSERS>`n"
 
 		$allUsers += $user.Name
 	}
@@ -61,11 +64,11 @@ foreach ($userAd in $usersAd) {
 	$path = "C:\Users\"+ $userAd
 	$folderSize = Get-Size $path
 	
-	$xml += "<WINUSERS>"
-	$xml += "<NAME>"+ $userAd +"</NAME>"
-	$xml += "<TYPE>Domain user</TYPE>"
-	$xml += "<SIZE>"+ $folderSize +"</SIZE>"
-	$xml += "</WINUSERS>"
+	$xml += "<WINUSERS>`n"
+	$xml += "<NAME>"+ $userAd +"</NAME>`n"
+	$xml += "<TYPE>Domain user</TYPE>`n"
+	$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
+	$xml += "</WINUSERS>`n"
 }
 
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
