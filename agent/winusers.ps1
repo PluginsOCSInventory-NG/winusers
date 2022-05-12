@@ -23,6 +23,16 @@ function Get-Size
 	}
 }
 
+function Check-AdUser($username) { 
+    $ad_User = $null 
+    $ad_User = Get-ADUser -Identity $username 
+    if($ad_User -ne $null) { 
+        return "Domain user" 
+    } else { 
+        return "Local user" 
+    }
+}
+
 $users = Get-LocalUser | Select *
 $pathUsers = "C:\Users"
 $allUsers = @()
@@ -63,11 +73,17 @@ $usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
 
 foreach ($userAd in $usersAd) {
 	$path = "C:\Users\"+ $userAd
-	$folderSize = Get-Size $path
+	if (Get-Command Get-ADUser -errorAction SilentlyContinue) {
+		$type = Check-AdUser -username $userAd 
+		$folderSize ='0'
+	} else {
+		$folderSize = Get-Size
+		$type = "Domain"
+	}
 	
 	$xml += "<WINUSERS>`n"
 	$xml += "<NAME>"+ $userAd +"</NAME>`n"
-	$xml += "<TYPE>Domain</TYPE>`n"
+	$xml += "<TYPE>"+ $type +"</TYPE>`n"
 	$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
 	$xml += "</WINUSERS>`n"
 }
