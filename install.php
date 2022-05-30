@@ -22,6 +22,9 @@ function extension_install_winusers()
                              `USERMAYCHANGEPWD` VARCHAR(255) DEFAULT NULL,
                              `PASSWORDEXPIRES` VARCHAR(255) DEFAULT NULL,
                              `SID` VARCHAR(255) DEFAULT NULL,
+                             `USERCONNEXION` VARCHAR(255) DEFAULT NULL,
+                             `NUMBERREMOTECONNEXION` VARCHAR(255) DEFAULT NULL,
+                             `IPREMOTE` VARCHAR(255) DEFAULT NULL,
                              PRIMARY KEY  (`ID`,`HARDWARE_ID`)
                              ) ENGINE=InnoDB ;");
 }

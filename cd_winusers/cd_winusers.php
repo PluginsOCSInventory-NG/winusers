@@ -35,7 +35,10 @@
 						'Status' => 'status',
 						'Change Password' => 'usermaychangepwd',
 						'Password expires' => 'passwordexpires',
-						'Sid' => 'sid'
+						'Sid' => 'sid',
+						'User Connexion'  => 'userconnexion',
+						'Number Remote Connexion' => 'numberremoteconnexion',
+						'Ip Remote' => 'ipremote'
 	);
 	$list_col_cant_del=$list_fields;
 	$default_fields= $list_fields;
