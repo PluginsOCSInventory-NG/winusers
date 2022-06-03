@@ -37,6 +37,10 @@ $users = Get-LocalUser | Select *
 $pathUsers = "C:\Users"
 $allUsers = @()
 
+$startTime = (get-date).AddDays(-15)
+$logEvents = Get-Eventlog -LogName Security -after $startTime | where {$_.eventID -eq 4624}
+
+
 foreach ($user in $users) {
 	if($user.Name -ne $null){
 	
@@ -45,6 +49,25 @@ foreach ($user in $users) {
 		$folderSize = Get-Size $path
 		if($user.Enabled -ne "False") { $userStatus = "Disabled" } else { $userStatus = "Enabled" }
 		if($userType -eq "Local") { $userType = $user.PrincipalSource }
+
+		$numberConnexion = 0
+		$workstation = ""
+		$numberRemoteConnexion = 0
+		$ipRemote ="" 
+
+		foreach($userconnection in $logEvents){
+			#In local logon
+			if(($userconnection.ReplacementStrings[5] -eq $user.Name) -and (($userconnection.ReplacementStrings[8] -eq 2) -or ($userconnection.ReplacementStrings[8] -eq 7))){
+				$numberConnexion = $numberConnexion + 1
+				$workstation = $userconnection.ReplacementStrings[11]
+			#In remote
+			}if (($userconnection.ReplacementStrings[5] -eq $user.Name ) -and ($userconnection.ReplacementStrings[8] -eq 10)){
+				$workstation = $userconnection.ReplacementStrings[11]
+				$numberRemoteConnexion = $numberRemoteConnexion + 1
+				$ipRemote = $userconnection.ReplacementStrings[18]
+			}
+		}
+
 		
 		$xml += "<WINUSERS>`n"
 		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
@@ -56,6 +79,9 @@ foreach ($user in $users) {
 		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>`n"
 		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>`n"
 		$xml += "<SID>"+ $user.SID +"</SID>`n"
+		$xml += "<USERCONNECTION>"+ $numberConnexion +"</USERCONNECTION>`n"
+		$xml += "<NUMBERREMOTECONNECTION>"+ $numberRemoteConnexion +"</NUMBERREMOTECONNECTION>`n"
+		$xml += "<IPREMOTE>"+ $ipRemote +"</IPREMOTE>`n"
 		$xml += "</WINUSERS>`n"
 
 		$allUsers += $user.Name

@@ -31,7 +31,10 @@ fields => {
      USERMAYCHANGEPWD => {},
      PASSWORDEXPIRES => {},
      STATUS => {},
-     SID => {}
+     SID => {},
+     USERCONNECTION => {},
+     NUMBERREMOTECONNECTION => {},
+     IPREMOTE => {},
 }
  
 };
