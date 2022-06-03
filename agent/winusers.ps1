@@ -37,7 +37,7 @@ $users = Get-LocalUser | Select *
 $pathUsers = "C:\Users"
 $allUsers = @()
 
-$startTime = (get-date).AddHours(-3)
+$startTime = (get-date).AddDays(-15)
 $logEvents = Get-Eventlog -LogName Security -after $startTime | where {$_.eventID -eq 4624}
 
 
@@ -79,7 +79,7 @@ foreach ($user in $users) {
 		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>`n"
 		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>`n"
 		$xml += "<SID>"+ $user.SID +"</SID>`n"
-		$xml += "<USERCONNECTION>"+ $numberConnexion +"</USERCONNECTION>`n"
+		$xml += "<USERCONNEXION>"+ $numberConnexion +"</USERCONNEXION>`n"
 		$xml += "<NUMBERREMOTECONNEXION>"+ $numberRemoteConnexion +"</NUMBERREMOTECONNEXION>`n"
 		$xml += "<IPREMOTE>"+ $ipRemote +"</IPREMOTE>`n"
 		$xml += "</WINUSERS>`n"
