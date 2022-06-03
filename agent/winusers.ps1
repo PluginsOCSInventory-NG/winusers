@@ -79,8 +79,8 @@ foreach ($user in $users) {
 		$xml += "<USERMAYCHANGEPWD>"+ $user.UserMayChangePassword +"</USERMAYCHANGEPWD>`n"
 		$xml += "<PASSWORDEXPIRES>"+ $user.PasswordExpires +"</PASSWORDEXPIRES>`n"
 		$xml += "<SID>"+ $user.SID +"</SID>`n"
-		$xml += "<USERCONNEXION>"+ $numberConnexion +"</USERCONNEXION>`n"
-		$xml += "<NUMBERREMOTECONNEXION>"+ $numberRemoteConnexion +"</NUMBERREMOTECONNEXION>`n"
+		$xml += "<USERCONNECTION>"+ $numberConnexion +"</USERCONNECTION>`n"
+		$xml += "<NUMBERREMOTECONNECTION>"+ $numberRemoteConnexion +"</NUMBERREMOTECONNECTION>`n"
 		$xml += "<IPREMOTE>"+ $ipRemote +"</IPREMOTE>`n"
 		$xml += "</WINUSERS>`n"
 

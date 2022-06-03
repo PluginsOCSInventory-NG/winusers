@@ -32,8 +32,8 @@ fields => {
      PASSWORDEXPIRES => {},
      STATUS => {},
      SID => {},
-     USERCONNEXION => {},
-     NUMBERREMOTECONNEXION => {},
+     USERCONNECTION => {},
+     NUMBERREMOTECONNECTION => {},
      IPREMOTE => {},
 }
  
