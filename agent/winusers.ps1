@@ -1,6 +1,7 @@
+# Function to get Admin user status
 function Get-AdminUser {
 	param([string] $username)
-	$admingroup = Get-LocalGroupMember -SID "S-1-5-32-544"
+	$admingroup = Get-LocalGroupMember -SID "S-1-5-32-544" -ErrorAction SilentlyContinue
 	$userType = "Local"
 	
 	foreach ($admin in $admingroup) {
@@ -13,6 +14,7 @@ function Get-AdminUser {
 	return $userType
 }
 
+# Function to get user folder size
 function Get-Size
 {
 	param([string]$pth)
@@ -23,23 +25,39 @@ function Get-Size
 	}
 }
 
+# Function to check if is an AD user
 function Check-AdUser($username) { 
     $ad_User = $null 
-    $ad_User = Get-ADUser -Identity $username 
-    if($ad_User -ne $null) { 
-        return "Domain user" 
-    } else { 
-        return "Local user" 
-    }
+	try {
+		$ad_User = Get-ADUser -Identity $username
+		return "Domain" 
+	} catch {
+		return "Unknown" 
+	}
 }
 
+# Function to retrieve user AD SID
+function Get-AdSid
+{
+	param([string]$pth, [array]$profileList)
+	foreach($sid in $profileList) {
+		if($pth -eq $sid.ProfileImagePath) {
+			return $sid.PSChildName
+		}
+	}
+
+	return ""
+}
+
+#################################
+#          Local User           #
+#################################
 $users = Get-LocalUser | Select *
 $pathUsers = "C:\Users"
 $allUsers = @()
 
 $startTime = (get-date).AddDays(-15)
 $logEvents = Get-Eventlog -LogName Security -after $startTime | where {$_.eventID -eq 4624}
-
 
 foreach ($user in $users) {
 	if($user.Name -ne $null){
@@ -68,7 +86,6 @@ foreach ($user in $users) {
 			}
 		}
 
-		
 		$xml += "<WINUSERS>`n"
 		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
 		$xml += "<TYPE>"+ $userType +"</TYPE>`n"
@@ -88,6 +105,15 @@ foreach ($user in $users) {
 	}
 }
 
+#################################
+#            AD User            #
+#################################
+# Get computer account type connection
+$Dsregcmd = New-Object PSObject ; Dsregcmd /status | Where {$_ -match ' : '} | ForEach { $Item = $_.Trim() -split '\s:\s'; $Dsregcmd | Add-Member -MemberType NoteProperty -Name $($Item[0] -replace '[:\s]','') -Value $Item[1] -EA SilentlyContinue }
+
+$profileListPath =  @("Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\*")
+$profileList = Get-ItemProperty -Path $profileListPath -ErrorAction Ignore | Select ProfileImagePath, PSChildName
+
 $tmp = Get-ChildItem -Path $pathUsers | Select "Name"
 [System.Collections.ArrayList]$usersFolder = $tmp.Name
 
@@ -99,18 +125,29 @@ $usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
 
 foreach ($userAd in $usersAd) {
 	$path = "C:\Users\"+ $userAd
-	if (Get-Command Get-ADUser -errorAction SilentlyContinue) {
-		$type = Check-AdUser -username $userAd 
-		$folderSize ='0'
-	} else {
-		$folderSize = Get-Size
-		$type = "Domain"
+
+	$sid = Get-AdSid $path $profileList
+
+	if($Dsregcmd.AzureAdJoined -eq "YES") {
+		$folderSize = Get-Size $path
+		$type = "AzureAD"
+	}
+
+	if($Dsregcmd.DomainJoined -eq "YES") {
+		if (Get-Command Get-ADUser -errorAction SilentlyContinue) {
+			$type = Check-AdUser -username $userAd
+			$folderSize = Get-Size $path
+		} else {
+			$type = "Domain"
+			$folderSize = Get-Size $path
+		}
 	}
 	
 	$xml += "<WINUSERS>`n"
 	$xml += "<NAME>"+ $userAd +"</NAME>`n"
 	$xml += "<TYPE>"+ $type +"</TYPE>`n"
 	$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
+	$xml += "<SID>"+ $sid +"</SID>`n"
 	$xml += "</WINUSERS>`n"
 }
 
