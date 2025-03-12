@@ -53,7 +53,7 @@ function Get-AdSid
 #          Local User           #
 #################################
 $users = Get-LocalUser | Select *
-$pathUsers = "C:\Users"
+$pathUsers = "C:\\Users"
 $allUsers = @()
 
 $startTime = (get-date).AddDays(-15)
@@ -63,7 +63,7 @@ foreach ($user in $users) {
 	if($user.Name -ne $null){
 	
 		$userType = Get-AdminUser $user.Name
-		$path = "C:\Users\"+ $user.Name
+		$path = "C:\\Users\\"+ $user.Name
 		if (Test-Path $path) {
 			$folderCreated = (Get-Item $path).CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
 		} else {
@@ -117,7 +117,7 @@ foreach ($user in $users) {
 # Get computer account type connection
 $Dsregcmd = New-Object PSObject ; Dsregcmd /status | Where {$_ -match ' : '} | ForEach { $Item = $_.Trim() -split '\s:\s'; $Dsregcmd | Add-Member -MemberType NoteProperty -Name $($Item[0] -replace '[:\s]','') -Value $Item[1] -EA SilentlyContinue }
 
-$profileListPath =  @("Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\*")
+$profileListPath =  @("Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\*")
 $profileList = Get-ItemProperty -Path $profileListPath -ErrorAction Ignore | Select ProfileImagePath, PSChildName
 
 $tmp = Get-ChildItem -Path $pathUsers | Select "Name"
@@ -130,7 +130,7 @@ while ($usersFolder -contains "Public") {
 $usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
 
 foreach ($userAd in $usersAd) {
-	$path = "C:\Users\"+ $userAd
+	$path = "C:\\Users\\"+ $userAd
 
 	if (Test-Path $path) {
 		$folderCreated = (Get-Item $path).CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
