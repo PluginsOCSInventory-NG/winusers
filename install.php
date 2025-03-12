@@ -16,6 +16,7 @@ function extension_install_winusers()
             `HARDWARE_ID` INT(11) NOT NULL,
             `NAME` VARCHAR(255) DEFAULT NULL,
             `TYPE` VARCHAR(255) DEFAULT NULL,
+            `CREATED` DATETIME DEFAULT NULL,
             `SIZE` VARCHAR(255) DEFAULT '0',
             `LASTLOGON` VARCHAR(255) DEFAULT NULL,
             `DESCRIPTION` VARCHAR(255) DEFAULT NULL,

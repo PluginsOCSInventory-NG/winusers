@@ -64,6 +64,11 @@ foreach ($user in $users) {
 	
 		$userType = Get-AdminUser $user.Name
 		$path = "C:\Users\"+ $user.Name
+		if (Test-Path $path) {
+			$folderCreated = (Get-Item $path).CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
+		} else {
+			$folderCreated = $null  # Folder not found
+		}
 		$folderSize = Get-Size $path
 		if($user.Enabled -ne "False") { $userStatus = "Disabled" } else { $userStatus = "Enabled" }
 		if($userType -eq "Local") { $userType = $user.PrincipalSource }
@@ -89,6 +94,7 @@ foreach ($user in $users) {
 		$xml += "<WINUSERS>`n"
 		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
 		$xml += "<TYPE>"+ $userType +"</TYPE>`n"
+		$xml += "<CREATED>" + $folderCreated + "</CREATED>`n"
 		$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
 		$xml += "<LASTLOGON>"+ $user.LastLogon +"</LASTLOGON>`n"
 		$xml += "<DESCRIPTION>"+ $user.Description +"</DESCRIPTION>`n"
@@ -126,6 +132,12 @@ $usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
 foreach ($userAd in $usersAd) {
 	$path = "C:\Users\"+ $userAd
 
+	if (Test-Path $path) {
+		$folderCreated = (Get-Item $path).CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
+	} else {
+		$folderCreated = $null  # Folder not found
+	}
+
 	$sid = Get-AdSid $path $profileList
 
 	if($Dsregcmd.AzureAdJoined -eq "YES") {
@@ -146,6 +158,7 @@ foreach ($userAd in $usersAd) {
 	$xml += "<WINUSERS>`n"
 	$xml += "<NAME>"+ $userAd +"</NAME>`n"
 	$xml += "<TYPE>"+ $type +"</TYPE>`n"
+	$xml += "<CREATED>" + $folderCreated + "</CREATED>`n"
 	$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
 	$xml += "<SID>"+ $sid +"</SID>`n"
 	$xml += "</WINUSERS>`n"
