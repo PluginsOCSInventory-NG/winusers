@@ -25,6 +25,7 @@ cache => 0,
 fields => {
      NAME => {},
      TYPE => {},
+     CREATED => {},
      SIZE => {},
      LASTLOGON => {},
      DESCRIPTION => {},

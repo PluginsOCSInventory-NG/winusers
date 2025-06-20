@@ -53,7 +53,7 @@ function Get-AdSid
 #          Local User           #
 #################################
 $users = Get-LocalUser | Select *
-$pathUsers = "C:\Users"
+$pathUsers = "C:\\Users"
 $allUsers = @()
 
 $startTime = (get-date).AddDays(-15)
@@ -63,7 +63,12 @@ foreach ($user in $users) {
 	if($user.Name -ne $null){
 	
 		$userType = Get-AdminUser $user.Name
-		$path = "C:\Users\"+ $user.Name
+		$path = "C:\\Users\\"+ $user.Name
+		if (Test-Path $path) {
+			$folderCreated = (Get-Item $path).CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
+		} else {
+			$folderCreated = $null  # Folder not found
+		}
 		$folderSize = Get-Size $path
 		if($user.Enabled -ne "False") { $userStatus = "Disabled" } else { $userStatus = "Enabled" }
 		if($userType -eq "Local") { $userType = $user.PrincipalSource }
@@ -89,6 +94,7 @@ foreach ($user in $users) {
 		$xml += "<WINUSERS>`n"
 		$xml += "<NAME>"+ $user.Name +"</NAME>`n"
 		$xml += "<TYPE>"+ $userType +"</TYPE>`n"
+		$xml += "<CREATED>" + $folderCreated + "</CREATED>`n"
 		$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
 		$xml += "<LASTLOGON>"+ $user.LastLogon +"</LASTLOGON>`n"
 		$xml += "<DESCRIPTION>"+ $user.Description +"</DESCRIPTION>`n"
@@ -111,7 +117,7 @@ foreach ($user in $users) {
 # Get computer account type connection
 $Dsregcmd = New-Object PSObject ; Dsregcmd /status | Where {$_ -match ' : '} | ForEach { $Item = $_.Trim() -split '\s:\s'; $Dsregcmd | Add-Member -MemberType NoteProperty -Name $($Item[0] -replace '[:\s]','') -Value $Item[1] -EA SilentlyContinue }
 
-$profileListPath =  @("Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\ProfileList\*")
+$profileListPath =  @("Registry::HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\*")
 $profileList = Get-ItemProperty -Path $profileListPath -ErrorAction Ignore | Select ProfileImagePath, PSChildName
 
 $tmp = Get-ChildItem -Path $pathUsers | Select "Name"
@@ -124,7 +130,13 @@ while ($usersFolder -contains "Public") {
 $usersAd = $usersFolder | Where-Object {$allUsers -notcontains $_}
 
 foreach ($userAd in $usersAd) {
-	$path = "C:\Users\"+ $userAd
+	$path = "C:\\Users\\"+ $userAd
+
+	if (Test-Path $path) {
+		$folderCreated = (Get-Item $path).CreationTime.ToString("yyyy-MM-dd HH:mm:ss")
+	} else {
+		$folderCreated = $null  # Folder not found
+	}
 
 	$sid = Get-AdSid $path $profileList
 
@@ -146,6 +158,7 @@ foreach ($userAd in $usersAd) {
 	$xml += "<WINUSERS>`n"
 	$xml += "<NAME>"+ $userAd +"</NAME>`n"
 	$xml += "<TYPE>"+ $type +"</TYPE>`n"
+	$xml += "<CREATED>" + $folderCreated + "</CREATED>`n"
 	$xml += "<SIZE>"+ $folderSize +"</SIZE>`n"
 	$xml += "<SID>"+ $sid +"</SID>`n"
 	$xml += "</WINUSERS>`n"

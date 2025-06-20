@@ -29,6 +29,7 @@
 	echo open_form($form_name);
 	$list_fields=array( 'Name' => 'name',
 						'Type' => 'type',
+						'Created' => 'created',
 						'Size (MB)' => 'size',
 						'Last logon' => 'lastlogon',
 						'Description' => 'description',
